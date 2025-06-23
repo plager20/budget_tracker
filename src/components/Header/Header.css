@@ -1,0 +1,34 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  background-color: inherit;
+  border-bottom: 1px solid #000000;
+}
+
+.header__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+}
+
+.header__title {
+  padding: 0;
+  margin: 0;
+  background: -webkit-linear-gradient(#003393, #2661d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header__welcome {
+  font-size: 24px;
+  margin: 0;
+}
+
+.header__buttons {
+}
+
+.header__logout-btn {
+  width: 75px;
+  height: 30px;
+}

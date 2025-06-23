@@ -1,0 +1,30 @@
+.budget {
+  padding: 15px 200px;
+  margin: 0 auto;
+  background-color: inherit;
+  border: 1px solid #000000;
+  border-top: none;
+  width: 1000px;
+}
+
+.budget__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.budget__title {
+}
+
+.budget__lists {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.budget__income {
+}
+
+.budget__expenses {
+}
