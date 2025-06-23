@@ -1,12 +1,14 @@
 import './Budget.css';
 
-function Budget() {
+function Budget({ handleAddClick }) {
   return (
     <section className='budget'>
       <div className='budget__header'>
         <h2 className='budget__title'>Budget</h2>
         <p className='budget__net-income'>Net: $0</p>
-        <button className='budget__add-item'>Add income/expense</button>
+        <button className='budget__add-item' onClick={handleAddClick}>
+          Add income/expense
+        </button>
       </div>
       <div className='budget__lists'>
         <ul className='budget__list'>
