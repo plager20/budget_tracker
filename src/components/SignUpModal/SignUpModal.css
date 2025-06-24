@@ -1,4 +1,4 @@
-.moneyModal {
+.signUpModal {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,13 +14,13 @@
   font-family: roboto;
 }
 
-.moneyModal_opened {
+.signUpModal_opened {
   visibility: visible;
   opacity: 1;
   transition-delay: 0s;
 }
 
-.moneyModal__content {
+.signUpModal__content {
   position: relative;
   background-color: #fff;
   padding: 28px 28px 36px;
@@ -30,14 +30,14 @@
   border-radius: 20px;
 }
 
-.moneyModal__title {
+.signUpModal__title {
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
   margin: 0 0 24px 0;
 }
 
-.moneyModal__close {
+.signUpModal__close {
   margin: 0;
   padding: 0;
   position: absolute;
@@ -53,14 +53,14 @@
   cursor: pointer;
 }
 
-.moneyModal__form {
+.signUpModal__form {
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 24px;
 }
 
-.moneyModal__label {
+.signUpModal__label {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -70,7 +70,7 @@
   margin: 0 0 32px 0;
 }
 
-.moneyModal__input {
+.signUpModal__input {
   display: flex;
   margin: 0;
   padding: 0;
@@ -79,39 +79,7 @@
   outline: none;
 }
 
-.moneyModal__input::-webkit-outer-spin-button,
-.moneyModal__input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.moneyModal__radio-buttons {
-  border: none;
-  margin: 0 0 32px 0;
-  padding: 0;
-}
-
-.moneyModal__legend {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  text-align: left;
-  margin: 0 0 4px 0;
-}
-
-.moneyModal__label_type_radio {
-  flex-direction: row;
-  margin: 8px 0 0 0;
-}
-
-.moneyModal__radio-input {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  text-align: left;
-}
-
-.moneyModal__submit {
+.signUpModal__submit {
   width: 124px;
   height: 36px;
   margin: 0;

@@ -44,3 +44,17 @@
 .header__logout-btn:hover {
   cursor: pointer;
 }
+
+.header__login-btn {
+  width: 100px;
+  height: 30px;
+  margin: 0 0 0 22.69px;
+  border: none;
+  background: -webkit-linear-gradient(#003393, #2661d1);
+  color: #ffffff;
+  border-radius: 15px;
+}
+
+.header__login-btn:hover {
+  cursor: pointer;
+}

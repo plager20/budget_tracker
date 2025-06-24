@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './MoneyModal.css';
 
-function MoneyModal({ closeActiveModal, isOpen }) {
+function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [type, setType] = useState('');
@@ -17,18 +17,18 @@ function MoneyModal({ closeActiveModal, isOpen }) {
   };
 
   const handleTypeChange = (e) => {
-    setType(e.target.id);
+    setType(e.target.value);
     console.log(e.target.value);
   };
 
   const resetForm = () => {
     setName('');
     setAmount('');
-    setType('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    onAddItem({ name, type, amount: Number(amount) });
     closeActiveModal();
     resetForm();
   };
@@ -91,7 +91,7 @@ function MoneyModal({ closeActiveModal, isOpen }) {
           <label htmlFor='amount' className='moneyModal__label'>
             Amount
             <input
-              type='numeric'
+              type='number'
               className='moneyModal__input'
               id='amount'
               placeholder='Amount'
