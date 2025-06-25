@@ -10,6 +10,7 @@ import { postItems, deleteItems, getItems, patchItems } from '../../utils/api';
 import SignInModal from '../SignInModal/SignInModal';
 import CurrentUserContext from '../../context/CurrentUserContext';
 import EditTransactionModal from '../EditTransactionModal/EditTransactionModal';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 function App() {
   const [activeModal, setActiveModal] = useState('');
@@ -93,7 +94,7 @@ function App() {
       console.error('Missing token or transaction');
       return;
     }
-    console.log('Editing item with id:', selectedTransaction._id);
+
     patchItems(data, selectedTransaction._id, token)
       .then((updatedTransaction) => {
         setTransactionItems((transactions) =>
@@ -108,7 +109,7 @@ function App() {
       .catch(console.error);
   };
 
-  const handleDeleteCard = (id) => {
+  const handleDeleteTransaction = (id) => {
     const token = getToken();
     if (!token) {
       console.error('No token found');
@@ -117,7 +118,7 @@ function App() {
 
     deleteItems(id, token)
       .then(() => {
-        setClothingItems((prevItems) =>
+        setTransactionItems((prevItems) =>
           prevItems.filter((item) => item._id !== id)
         );
       })
@@ -149,6 +150,10 @@ function App() {
   const handleEditModal = (transaction) => {
     setActiveModal('edit');
     setSelectedTransaction(transaction);
+  };
+
+  const handleDeleteModal = () => {
+    setActiveModal('delete');
   };
 
   const closeActiveModal = () => {
@@ -191,6 +196,13 @@ function App() {
           closeActiveModal={closeActiveModal}
           isOpen={activeModal === 'edit'}
           handleEditItem={handleEditItem}
+          transaction={selectedTransaction}
+          handleDeleteModal={handleDeleteModal}
+        />
+        <DeleteModal
+          isOpen={activeModal === 'delete'}
+          closeActiveModal={closeActiveModal}
+          handleDeleteTransaction={handleDeleteTransaction}
           transaction={selectedTransaction}
         />
       </div>

@@ -4,7 +4,7 @@ function Header({ isLoggedin, handleSignInModal, handleLogOut, currentUser }) {
   return (
     <header className='header'>
       <div className='header__content'>
-        <h1 className='header__title'>Budgetly</h1>
+        <h1 className='header__title'>Spendly</h1>
         {isLoggedin ? (
           <p className='header__welcome'>Hello, {currentUser.name}</p>
         ) : (

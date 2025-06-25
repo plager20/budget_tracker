@@ -6,6 +6,7 @@ function EditTransactionModal({
   isOpen,
   handleEditItem,
   transaction,
+  handleDeleteModal,
 }) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
@@ -23,16 +24,9 @@ function EditTransactionModal({
     setType(e.target.value);
   };
 
-  //const resetForm = () => {
-  //  setName('');
-  //  setAmount('');
-  //  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     handleEditItem({ name, type, amount: Number(amount) });
-    closeActiveModal();
-    // resetForm();
   };
 
   useEffect(() => {
@@ -119,9 +113,18 @@ function EditTransactionModal({
               onChange={handleAmountChange}
             />
           </label>
-          <button type='submit' className='editTransactionModal__submit'>
-            Add
-          </button>
+          <div className='editTransactionModal__btn-container'>
+            <button type='submit' className='editTransactionModal__submit'>
+              Edit
+            </button>
+            <button
+              type='button'
+              onClick={handleDeleteModal}
+              className='editTransactionModal__delete-btn'
+            >
+              Delete
+            </button>
+          </div>
         </form>
       </div>
     </div>
