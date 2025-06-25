@@ -6,14 +6,17 @@ import MoneyModal from '../MoneyModal/MoneyModal';
 import SignUpModal from '../SignUpModal/SignupModal';
 import { register, logIn, getUserInfo } from '../../utils/auth';
 import { getToken, removeToken, setToken } from '../../utils/token';
-import { postItems, deleteItems } from '../../utils/api';
+import { postItems, deleteItems, getItems, patchItems } from '../../utils/api';
 import SignInModal from '../SignInModal/SignInModal';
+import CurrentUserContext from '../../context/CurrentUserContext';
+import EditTransactionModal from '../EditTransactionModal/EditTransactionModal';
 
 function App() {
   const [activeModal, setActiveModal] = useState('');
   const [isLoggedin, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionItems, setTransactionItems] = useState([]);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   // Registration/Login
   const handleRegistration = (data) => {
@@ -84,6 +87,27 @@ function App() {
       .catch(console.error);
   };
 
+  const handleEditItem = (data) => {
+    const token = getToken();
+    if (!token || !selectedTransaction) {
+      console.error('Missing token or transaction');
+      return;
+    }
+    console.log('Editing item with id:', selectedTransaction._id);
+    patchItems(data, selectedTransaction._id, token)
+      .then((updatedTransaction) => {
+        setTransactionItems((transactions) =>
+          transactions.map((item) =>
+            item._id === selectedTransaction._id
+              ? updatedTransaction.data
+              : item
+          )
+        );
+      })
+      .then(closeActiveModal)
+      .catch(console.error);
+  };
+
   const handleDeleteCard = (id) => {
     const token = getToken();
     if (!token) {
@@ -101,6 +125,14 @@ function App() {
       .catch(console.error);
   };
 
+  useEffect(() => {
+    getItems()
+      .then((data) => {
+        setTransactionItems(data);
+      })
+      .catch(console.error);
+  }, []);
+
   // Modals
   const handleAddClick = () => {
     setActiveModal('add-transaction');
@@ -114,37 +146,55 @@ function App() {
     setActiveModal('signin');
   };
 
+  const handleEditModal = (transaction) => {
+    setActiveModal('edit');
+    setSelectedTransaction(transaction);
+  };
+
   const closeActiveModal = () => {
     setActiveModal('');
   };
 
   return (
-    <div className='App'>
-      <div className='app__content'>
-        <Header
-          isLoggedin={isLoggedin}
-          handleSignInModal={handleSignInModal}
-          handleLogOut={handleLogOut}
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className='App'>
+        <div className='app__content'>
+          <Header
+            isLoggedin={isLoggedin}
+            handleSignInModal={handleSignInModal}
+            handleLogOut={handleLogOut}
+            currentUser={currentUser}
+          />
+          <Main
+            handleAddClick={handleAddClick}
+            transactionItems={transactionItems}
+            handleEditModal={handleEditModal}
+          />
+        </div>
+        <MoneyModal
+          closeActiveModal={closeActiveModal}
+          isOpen={activeModal === 'add-transaction'}
+          onAddItem={onAddItem}
         />
-        <Main handleAddClick={handleAddClick} />
+        <SignUpModal
+          closeActiveModal={closeActiveModal}
+          isOpen={activeModal === 'signup'}
+          handleRegistration={handleRegistration}
+        />
+        <SignInModal
+          closeActiveModal={closeActiveModal}
+          isOpen={activeModal === 'signin'}
+          handleLogIn={handleLogIn}
+          handleSignUpModal={handleSignUpModal}
+        />
+        <EditTransactionModal
+          closeActiveModal={closeActiveModal}
+          isOpen={activeModal === 'edit'}
+          handleEditItem={handleEditItem}
+          transaction={selectedTransaction}
+        />
       </div>
-      <MoneyModal
-        closeActiveModal={closeActiveModal}
-        isOpen={activeModal === 'add-transaction'}
-        onAddItem={onAddItem}
-      />
-      <SignUpModal
-        closeActiveModal={closeActiveModal}
-        isOpen={activeModal === 'signup'}
-        handleRegistration={handleRegistration}
-      />
-      <SignInModal
-        closeActiveModal={closeActiveModal}
-        isOpen={activeModal === 'signin'}
-        handleLogIn={handleLogIn}
-        handleSignUpModal={handleSignUpModal}
-      />
-    </div>
+    </CurrentUserContext.Provider>
   );
 }
 

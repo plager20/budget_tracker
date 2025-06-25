@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
 import './Header.css';
 
-function Header({ isLoggedin, handleSignInModal, handleLogOut }) {
+function Header({ isLoggedin, handleSignInModal, handleLogOut, currentUser }) {
   return (
     <header className='header'>
       <div className='header__content'>
         <h1 className='header__title'>Budgetly</h1>
-        <p className='header__welcome'>Hello, user</p>
+        {isLoggedin ? (
+          <p className='header__welcome'>Hello, {currentUser.name}</p>
+        ) : (
+          <p className='header__welcome'>Welcome</p>
+        )}
+
         <div className='header__buttons'>
           {isLoggedin ? (
             <button className='header__logout-btn' onClick={handleLogOut}>

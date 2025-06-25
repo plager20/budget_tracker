@@ -8,17 +8,14 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
 
   const handleNameChange = (e) => {
     setName(e.target.value);
-    console.log(e.target.value);
   };
 
   const handleAmountChange = (e) => {
     setAmount(e.target.value);
-    console.log(e.target.value);
   };
 
   const handleTypeChange = (e) => {
     setType(e.target.value);
-    console.log(e.target.value);
   };
 
   const resetForm = () => {
@@ -53,7 +50,7 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
               <input
                 type='radio'
                 name='amount-type'
-                className='Moneymodal__radio-input'
+                className='moneyModal__radio-input'
                 id='income'
                 value='income'
                 onChange={handleTypeChange}

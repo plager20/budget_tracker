@@ -1,0 +1,123 @@
+.editTransactionModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0000004d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s ease-in-out 0.5s, opacity 0.5s ease-in-out;
+  font-family: roboto;
+}
+
+.editTransactionModal_opened {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.editTransactionModal__content {
+  position: relative;
+  background-color: #fff;
+  padding: 28px 28px 36px;
+  max-width: 496px;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 20px;
+}
+
+.editTransactionModal__title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0 0 24px 0;
+}
+
+.editTransactionModal__close {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  background-image: url(../../assets/close_btn.svg);
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+}
+
+.editTransactionModal__form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 24px;
+}
+
+.editTransactionModal__label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0 0 32px 0;
+}
+
+.editTransactionModal__input {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  border-width: 0;
+  border-bottom: 1px solid #000000;
+  outline: none;
+}
+
+.editTransactionModal__input::-webkit-outer-spin-button,
+.editTransactionModal__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.editTransactionModal__radio-buttons {
+  border: none;
+  margin: 0 0 32px 0;
+  padding: 0;
+}
+
+.editTransactionModal__legend {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+  margin: 0 0 4px 0;
+}
+
+.editTransactionModal__label_type_radio {
+  flex-direction: row;
+  margin: 8px 0 0 0;
+}
+
+.editTransactionModal__radio-input {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+}
+
+.editTransactionModal__submit {
+  width: 124px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: -webkit-linear-gradient(#003393, #2661d1);
+  color: #ffffff;
+}

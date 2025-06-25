@@ -1,0 +1,39 @@
+.budgetCard__list-item {
+  display: flex;
+  width: 200px;
+  align-items: center;
+  border: 1px solid #a2a2a24d;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+.budgetCard__income {
+  display: flex;
+  align-items: center;
+  color: #2cbb29;
+  margin: 0 0 0 auto;
+}
+
+.budgetCard__edit-btn {
+  height: 25px;
+  width: 25px;
+  background-image: url(../../assets/edit-btn.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #fafafa;
+  border: none;
+  padding: 0;
+  margin: 0 0 0 10px;
+}
+
+.budgetCard__edit-btn:hover {
+  cursor: pointer;
+}
+
+.budgetCard__expense {
+  display: flex;
+  align-items: center;
+  color: #bb2929;
+  margin: 0 0 0 auto;
+}
