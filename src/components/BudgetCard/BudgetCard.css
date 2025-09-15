@@ -7,10 +7,21 @@
   border-radius: 10px;
 }
 
+.budgetCard__transaction-name {
+  margin: 16px 0;
+}
+
 .budgetCard__income {
   display: flex;
   align-items: center;
   color: #2cbb29;
+  margin: 16px 0 16px auto;
+}
+
+.budgetCard__expense {
+  display: flex;
+  align-items: center;
+  color: #bb2929;
   margin: 0 0 0 auto;
 }
 
@@ -29,11 +40,4 @@
 
 .budgetCard__edit-btn:hover {
   cursor: pointer;
-}
-
-.budgetCard__expense {
-  display: flex;
-  align-items: center;
-  color: #bb2929;
-  margin: 0 0 0 auto;
 }

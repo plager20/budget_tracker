@@ -3,7 +3,7 @@ import './BudgetCard.css';
 function BudgetCard({ transaction, handleEditModal }) {
   return (
     <li className='budgetCard__list-item'>
-      <p>{transaction.name}</p>
+      <p className='budgetCard__transaction-name'>{transaction.name}</p>
       {transaction.type === 'income' ? (
         <p className='budgetCard__income'>+${transaction.amount}</p>
       ) : (

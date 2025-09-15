@@ -12,6 +12,9 @@ function Budget({
 }) {
   const [selectedIncomeCategory, setSelectedIncomeCategory] = useState('All');
   const [selectedExpenseCategory, setSelectedExpenseCategory] = useState('All');
+  const [selectedIncomeFrequency, setSelectedIncomeFrequency] = useState('All');
+  const [selectedExpenseFrequency, setSelectedExpenseFrequency] =
+    useState('All');
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -26,6 +29,62 @@ function Budget({
     'Other',
   ];
 
+  const frequency = ['This Week', 'This Month', 'Next Month'];
+
+  const getTransactionDueInfo = (transaction) => {
+    const today = new Date();
+    const dueDate = new Date(transaction.dueDate);
+
+    // Calculate days until due
+    const diffTime = dueDate - today;
+    const daysUntilDue = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // Start/end of this week (Sunday → Saturday)
+    const startOfThisWeek = new Date(today);
+    startOfThisWeek.setDate(today.getDate() - today.getDay());
+
+    const endOfThisWeek = new Date(startOfThisWeek);
+    endOfThisWeek.setDate(endOfThisWeek.getDate() + 6);
+
+    // Start/end of this month
+    const startOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfThisMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      0
+    );
+
+    // Start/end of next month
+    const startOfNextMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      1
+    );
+    const endOfNextMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() + 2,
+      0
+    );
+
+    const dueCategories = [];
+
+    // Determine applicable categories
+    if (dueDate >= startOfThisWeek && dueDate <= endOfThisWeek) {
+      dueCategories.push('This Week');
+    }
+    if (dueDate >= today && dueDate <= endOfThisMonth) {
+      dueCategories.push('This Month');
+    }
+    if (dueDate >= startOfNextMonth && dueDate <= endOfNextMonth) {
+      dueCategories.push('Next Month');
+    }
+    if (dueCategories.length === 0) {
+      dueCategories.push('All');
+    }
+
+    return { daysUntilDue, dueCategories };
+  };
+
   const userTransactions = transactionItems.filter(
     (transaction) => transaction.owner === currentUser?._id
   );
@@ -38,13 +97,31 @@ function Budget({
   );
 
   const filteredIncomeTransactions = incomeTransactions.filter((item) => {
-    if (selectedIncomeCategory === 'All') return true;
-    return item.category === selectedIncomeCategory;
+    const categoryMatch =
+      selectedIncomeCategory === 'All' ||
+      item.category === selectedIncomeCategory;
+
+    const { dueCategories } = getTransactionDueInfo(item);
+
+    const frequencyMatch =
+      selectedIncomeFrequency === 'All' ||
+      dueCategories.includes(selectedIncomeFrequency);
+
+    return categoryMatch && frequencyMatch;
   });
 
   const filteredExpenseTransactions = expenseTransactions.filter((item) => {
-    if (selectedExpenseCategory === 'All') return true;
-    return item.category === selectedExpenseCategory;
+    const categoryMatch =
+      selectedExpenseCategory === 'All' ||
+      item.category === selectedExpenseCategory;
+
+    const { dueCategories } = getTransactionDueInfo(item);
+
+    const frequencyMatch =
+      selectedExpenseFrequency === 'All' ||
+      dueCategories.includes(selectedExpenseFrequency);
+
+    return categoryMatch && frequencyMatch;
   });
 
   const incomeTotal = filteredIncomeTransactions.reduce(
@@ -97,7 +174,18 @@ function Budget({
               </select>
             </div>
             <div className='budget__list-filter-due-date'>
-              Filter by Date Due:
+              Filter by Receive Due:
+              <select
+                value={selectedIncomeFrequency}
+                onChange={(e) => setSelectedIncomeFrequency(e.target.value)}
+              >
+                <option value='All'>All</option>
+                {frequency.map((freq) => (
+                  <option key={freq} value={freq}>
+                    {freq}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           {filteredIncomeTransactions.length > 0 ? (
@@ -133,6 +221,17 @@ function Budget({
             </div>
             <div className='budget__list-filter-due-date'>
               Filter by Date Due:
+              <select
+                value={selectedExpenseFrequency}
+                onChange={(e) => setSelectedExpenseFrequency(e.target.value)}
+              >
+                <option value='All'>All</option>
+                {frequency.map((freq) => (
+                  <option key={freq} value={freq}>
+                    {freq}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           {filteredExpenseTransactions.length > 0 ? (
