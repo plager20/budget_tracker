@@ -74,6 +74,7 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
                 className='moneyModal__radio-input'
                 id='income'
                 value='income'
+                checked={type === 'income'}
                 onChange={handleTypeChange}
               />
               Income
@@ -88,6 +89,7 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
                 className='moneyModal__radio-input'
                 id='expense'
                 value='expense'
+                checked={type === 'expense'}
                 onChange={handleTypeChange}
               />
               Expense

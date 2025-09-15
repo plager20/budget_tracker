@@ -1,6 +1,6 @@
 import './Budget.css';
 import BudgetCard from '../BudgetCard/BudgetCard';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import CurrentUserContext from '../../context/CurrentUserContext';
 
 function Budget({
@@ -10,7 +10,21 @@ function Budget({
   handleEditModal,
   handleSignInModal,
 }) {
+  const [selectedIncomeCategory, setSelectedIncomeCategory] = useState('All');
+  const [selectedExpenseCategory, setSelectedExpenseCategory] = useState('All');
+
   const currentUser = useContext(CurrentUserContext);
+
+  const incomeCategories = ['Work', 'Freelance', 'Investment', 'Other'];
+  const expenseCategories = [
+    'Food',
+    'Rent',
+    'Bills',
+    'Entertainment',
+    'Transport',
+    'Shopping',
+    'Other',
+  ];
 
   const userTransactions = transactionItems.filter(
     (transaction) => transaction.owner === currentUser?._id
@@ -23,11 +37,21 @@ function Budget({
     (transaction) => transaction.type === 'expense'
   );
 
-  const incomeTotal = incomeTransactions.reduce(
+  const filteredIncomeTransactions = incomeTransactions.filter((item) => {
+    if (selectedIncomeCategory === 'All') return true;
+    return item.category === selectedIncomeCategory;
+  });
+
+  const filteredExpenseTransactions = expenseTransactions.filter((item) => {
+    if (selectedExpenseCategory === 'All') return true;
+    return item.category === selectedExpenseCategory;
+  });
+
+  const incomeTotal = filteredIncomeTransactions.reduce(
     (acc, item) => acc + item.amount,
     0
   );
-  const expenseTotal = expenseTransactions.reduce(
+  const expenseTotal = filteredExpenseTransactions.reduce(
     (acc, item) => acc + item.amount,
     0
   );
@@ -57,12 +81,31 @@ function Budget({
       <div className='budget__lists'>
         <ul className='budget__list'>
           <span className='budget__list-title'>Income</span>
-          {incomeTransactions.length > 0 ? (
-            incomeTransactions.map((incomeTransaction) => {
+          <div className='budget__list-filter-options'>
+            <div className='budget__list-filter-category'>
+              Filter by Category:
+              <select
+                value={selectedIncomeCategory}
+                onChange={(e) => setSelectedIncomeCategory(e.target.value)}
+              >
+                <option value='All'>All</option>
+                {incomeCategories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='budget__list-filter-due-date'>
+              Filter by Date Due:
+            </div>
+          </div>
+          {filteredIncomeTransactions.length > 0 ? (
+            filteredIncomeTransactions.map((filteredIncomeTransaction) => {
               return (
                 <BudgetCard
-                  key={incomeTransaction._id}
-                  transaction={incomeTransaction}
+                  key={filteredIncomeTransaction._id}
+                  transaction={filteredIncomeTransaction}
                   handleEditModal={handleEditModal}
                 />
               );
@@ -73,12 +116,31 @@ function Budget({
         </ul>
         <ul className='budget__list'>
           <span className='budget__list-title'>Expenses</span>
-          {expenseTransactions.length > 0 ? (
-            expenseTransactions.map((expenseTransaction) => {
+          <div className='budget__list-filter-options'>
+            <div className='budget__list-filter-category'>
+              Filter by Category:
+              <select
+                value={selectedExpenseCategory}
+                onChange={(e) => setSelectedExpenseCategory(e.target.value)}
+              >
+                <option value='All'>All</option>
+                {expenseCategories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='budget__list-filter-due-date'>
+              Filter by Date Due:
+            </div>
+          </div>
+          {filteredExpenseTransactions.length > 0 ? (
+            filteredExpenseTransactions.map((filteredExpenseTransaction) => {
               return (
                 <BudgetCard
-                  key={expenseTransaction._id}
-                  transaction={expenseTransaction}
+                  key={filteredExpenseTransaction._id}
+                  transaction={filteredExpenseTransaction}
                   handleEditModal={handleEditModal}
                 />
               );
