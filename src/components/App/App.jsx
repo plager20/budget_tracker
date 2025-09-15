@@ -76,7 +76,7 @@ function App() {
   const onAddItem = (data) => {
     const token = getToken();
     if (!token) {
-      console.error('No token found');
+      console.error('No token found, log in first');
       return;
     }
     console.log('Sending to API:', data);
@@ -171,9 +171,11 @@ function App() {
             currentUser={currentUser}
           />
           <Main
+            isLoggedin={isLoggedin}
             handleAddClick={handleAddClick}
             transactionItems={transactionItems}
             handleEditModal={handleEditModal}
+            handleSignInModal={handleSignInModal}
           />
         </div>
         <MoneyModal

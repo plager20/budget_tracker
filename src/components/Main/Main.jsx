@@ -1,11 +1,19 @@
 import Budget from '../Budget/Budget';
 
-function Main({ handleAddClick, transactionItems, handleEditModal }) {
+function Main({
+  isLoggedin,
+  handleAddClick,
+  transactionItems,
+  handleEditModal,
+  handleSignInModal,
+}) {
   return (
     <Budget
+      isLoggedin={isLoggedin}
       handleAddClick={handleAddClick}
       transactionItems={transactionItems}
       handleEditModal={handleEditModal}
+      handleSignInModal={handleSignInModal}
     />
   );
 }

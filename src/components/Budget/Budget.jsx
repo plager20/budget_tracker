@@ -3,7 +3,13 @@ import BudgetCard from '../BudgetCard/BudgetCard';
 import { useContext } from 'react';
 import CurrentUserContext from '../../context/CurrentUserContext';
 
-function Budget({ handleAddClick, transactionItems, handleEditModal }) {
+function Budget({
+  isLoggedin,
+  handleAddClick,
+  transactionItems,
+  handleEditModal,
+  handleSignInModal,
+}) {
   const currentUser = useContext(CurrentUserContext);
 
   const userTransactions = transactionItems.filter(
@@ -41,7 +47,10 @@ function Budget({ handleAddClick, transactionItems, handleEditModal }) {
       <div className='budget__header'>
         <h2 className='budget__title'>Budget</h2>
         <p className='budget__net-income'>Net: {formatCurrency(netTotal)}</p>
-        <button className='budget__add-item' onClick={handleAddClick}>
+        <button
+          className='budget__add-item'
+          onClick={isLoggedin ? handleAddClick : handleSignInModal}
+        >
           Add income/expense
         </button>
       </div>
