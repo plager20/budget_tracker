@@ -26,6 +26,7 @@ async function postItems(card, token) {
       name: card.name,
       type: card.type,
       amount: card.amount,
+      category: card.category,
     }),
   });
 }
@@ -41,6 +42,7 @@ async function patchItems(card, id, token) {
       name: card.name,
       type: card.type,
       amount: card.amount,
+      category: card.category,
     }),
   });
 }
