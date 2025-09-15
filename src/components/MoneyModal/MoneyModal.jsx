@@ -6,6 +6,8 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
   const [amount, setAmount] = useState('');
   const [type, setType] = useState('');
   const [category, setCategory] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [dueDateFrequency, setDueDateFrequency] = useState('');
 
   const incomeCategories = ['Work', 'Freelance', 'Investment', 'Other'];
   const expenseCategories = [
@@ -18,6 +20,8 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
     'Other',
   ];
 
+  const frequency = ['One Time', 'Weekly', 'Bi-Weekly', 'Monthly', 'Annually'];
+
   const handleNameChange = (e) => setName(e.target.value);
 
   const handleAmountChange = (e) => setAmount(e.target.value);
@@ -29,16 +33,30 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
 
   const handleCategoryChange = (e) => setCategory(e.target.value);
 
+  const handleDueDateChange = (e) => setDueDate(e.target.value);
+
+  const handleDueDateFrequencyChange = (e) =>
+    setDueDateFrequency(e.target.value);
+
   const resetForm = () => {
     setName('');
     setAmount('');
     setType('');
     setCategory('');
+    setDueDate('');
+    setDueDateFrequency('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddItem({ name, type, category, amount: Number(amount) });
+    onAddItem({
+      name,
+      type,
+      category,
+      dueDate,
+      dueDateFrequency,
+      amount: Number(amount),
+    });
     closeActiveModal();
     resetForm();
   };
@@ -140,6 +158,38 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
                   Select category
                 </option>
                 {availableCategories.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+
+          {/* Transaction Due Date */}
+
+          {type && (
+            <label htmlFor='dueDate' className='moneyModal__label'>
+              Next Due Date
+              <input
+                type='date'
+                id='dueDate'
+                className='moneyModal__input'
+                value={dueDate}
+                onChange={handleDueDateChange}
+                required
+              ></input>
+              <select
+                id='dueDateFrequency'
+                className='moneyModal__input'
+                value={dueDateFrequency}
+                onChange={handleDueDateFrequencyChange}
+                required
+              >
+                <option value='' disabled>
+                  Select Frequency
+                </option>
+                {frequency.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>
