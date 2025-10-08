@@ -31,60 +31,90 @@ function Budget({
 
   const frequency = ['This Week', 'This Month', 'Next Month'];
 
-  const getTransactionDueInfo = (transaction) => {
+  // Generate recurring transactions only for the selected filter
+  const generateOccurrences = (transaction, filter) => {
+    const results = [];
     const today = new Date();
     const dueDate = new Date(transaction.dueDate);
 
-    // Calculate days until due
-    const diffTime = dueDate - today;
-    const daysUntilDue = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // Frequency mapping (in days)
+    const freqMap = {
+      Once: null,
+      Weekly: 7,
+      Biweekly: 14,
+      Monthly: 30,
+      Annually: 365,
+    };
 
-    // Start/end of this week (Sunday → Saturday)
-    const startOfThisWeek = new Date(today);
-    startOfThisWeek.setDate(today.getDate() - today.getDay());
+    const freqDays = freqMap[transaction.dueDateFrequency];
+    const maxMonths = 3; // safety limit
+    const endLimit = new Date(today);
+    endLimit.setMonth(endLimit.getMonth() + maxMonths);
 
-    const endOfThisWeek = new Date(startOfThisWeek);
-    endOfThisWeek.setDate(endOfThisWeek.getDate() + 6);
-
-    // Start/end of this month
-    const startOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endOfThisMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 1,
-      0
-    );
-
-    // Start/end of next month
-    const startOfNextMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 1,
-      1
-    );
-    const endOfNextMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 2,
-      0
-    );
-
-    const dueCategories = [];
-
-    // Determine applicable categories
-    if (dueDate >= startOfThisWeek && dueDate <= endOfThisWeek) {
-      dueCategories.push('This Week');
-    }
-    if (dueDate >= today && dueDate <= endOfThisMonth) {
-      dueCategories.push('This Month');
-    }
-    if (dueDate >= startOfNextMonth && dueDate <= endOfNextMonth) {
-      dueCategories.push('Next Month');
-    }
-    if (dueCategories.length === 0) {
-      dueCategories.push('All');
+    // For "All", just show the base transaction once
+    if (filter === 'All' || !freqDays) {
+      results.push(transaction);
+      return results;
     }
 
-    return { daysUntilDue, dueCategories };
+    let currentDate = new Date(dueDate);
+
+    while (currentDate <= endLimit) {
+      const startOfThisWeek = new Date(today);
+      startOfThisWeek.setDate(today.getDate() - today.getDay());
+      const endOfThisWeek = new Date(startOfThisWeek);
+      endOfThisWeek.setDate(endOfThisWeek.getDate() + 6);
+
+      const startOfThisMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+      const endOfThisMonth = new Date(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        0
+      );
+
+      const startOfNextMonth = new Date(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        1
+      );
+      const endOfNextMonth = new Date(
+        today.getFullYear(),
+        today.getMonth() + 2,
+        0
+      );
+
+      let shouldAdd = false;
+
+      if (filter === 'This Week') {
+        shouldAdd =
+          currentDate >= startOfThisWeek && currentDate <= endOfThisWeek;
+      } else if (filter === 'This Month') {
+        shouldAdd =
+          currentDate >= startOfThisMonth && currentDate <= endOfThisMonth;
+      } else if (filter === 'Next Month') {
+        shouldAdd =
+          currentDate >= startOfNextMonth && currentDate <= endOfNextMonth;
+      }
+
+      if (shouldAdd) {
+        results.push({
+          ...transaction,
+          generatedDate: currentDate.toISOString().split('T')[0],
+        });
+      }
+
+      if (!freqDays) break;
+      currentDate.setDate(currentDate.getDate() + freqDays);
+    }
+
+    return results;
   };
 
+  // Filter transactions by user
   const userTransactions = transactionItems.filter(
     (transaction) => transaction.owner === currentUser?._id
   );
@@ -96,34 +126,28 @@ function Budget({
     (transaction) => transaction.type === 'expense'
   );
 
-  const filteredIncomeTransactions = incomeTransactions.filter((item) => {
+  // Apply filters & generate occurrences
+  const filteredIncomeTransactions = incomeTransactions.flatMap((item) => {
     const categoryMatch =
       selectedIncomeCategory === 'All' ||
       item.category === selectedIncomeCategory;
 
-    const { dueCategories } = getTransactionDueInfo(item);
+    if (!categoryMatch) return [];
 
-    const frequencyMatch =
-      selectedIncomeFrequency === 'All' ||
-      dueCategories.includes(selectedIncomeFrequency);
-
-    return categoryMatch && frequencyMatch;
+    return generateOccurrences(item, selectedIncomeFrequency);
   });
 
-  const filteredExpenseTransactions = expenseTransactions.filter((item) => {
+  const filteredExpenseTransactions = expenseTransactions.flatMap((item) => {
     const categoryMatch =
       selectedExpenseCategory === 'All' ||
       item.category === selectedExpenseCategory;
 
-    const { dueCategories } = getTransactionDueInfo(item);
+    if (!categoryMatch) return [];
 
-    const frequencyMatch =
-      selectedExpenseFrequency === 'All' ||
-      dueCategories.includes(selectedExpenseFrequency);
-
-    return categoryMatch && frequencyMatch;
+    return generateOccurrences(item, selectedExpenseFrequency);
   });
 
+  // Totals
   const incomeTotal = filteredIncomeTransactions.reduce(
     (acc, item) => acc + item.amount,
     0
@@ -132,7 +156,6 @@ function Budget({
     (acc, item) => acc + item.amount,
     0
   );
-
   const netTotal = incomeTotal - expenseTotal;
 
   const formatCurrency = (amount) => {
@@ -143,6 +166,7 @@ function Budget({
     });
     return isNegative ? `-${absolute}` : absolute;
   };
+
   return (
     <section className='budget'>
       <div className='budget__header'>
@@ -155,7 +179,9 @@ function Budget({
           Add income/expense
         </button>
       </div>
+
       <div className='budget__lists'>
+        {/* INCOME LIST */}
         <ul className='budget__list'>
           <span className='budget__list-title'>Income</span>
           <div className='budget__list-filter-options'>
@@ -189,19 +215,19 @@ function Budget({
             </div>
           </div>
           {filteredIncomeTransactions.length > 0 ? (
-            filteredIncomeTransactions.map((filteredIncomeTransaction) => {
-              return (
-                <BudgetCard
-                  key={filteredIncomeTransaction._id}
-                  transaction={filteredIncomeTransaction}
-                  handleEditModal={handleEditModal}
-                />
-              );
-            })
+            filteredIncomeTransactions.map((tx, index) => (
+              <BudgetCard
+                key={tx._id + (tx.generatedDate || index)}
+                transaction={tx}
+                handleEditModal={handleEditModal}
+              />
+            ))
           ) : (
             <p>No Income Found</p>
           )}
         </ul>
+
+        {/* EXPENSE LIST */}
         <ul className='budget__list'>
           <span className='budget__list-title'>Expenses</span>
           <div className='budget__list-filter-options'>
@@ -235,15 +261,13 @@ function Budget({
             </div>
           </div>
           {filteredExpenseTransactions.length > 0 ? (
-            filteredExpenseTransactions.map((filteredExpenseTransaction) => {
-              return (
-                <BudgetCard
-                  key={filteredExpenseTransaction._id}
-                  transaction={filteredExpenseTransaction}
-                  handleEditModal={handleEditModal}
-                />
-              );
-            })
+            filteredExpenseTransactions.map((tx, index) => (
+              <BudgetCard
+                key={tx._id + (tx.generatedDate || index)}
+                transaction={tx}
+                handleEditModal={handleEditModal}
+              />
+            ))
           ) : (
             <p>No Expenses Found</p>
           )}
