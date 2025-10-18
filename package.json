@@ -1,4 +1,8 @@
 {
+  "name": "Spendly",
+  "version": "1.0.0",
+  "description": "Frontend for the budgeting app.",
+  "license": "MIT",
   "scripts": {
     "dev": "vite --open",
     "build": "vite build",
@@ -6,9 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "eslint": "^9.27.0",
-    "json": "^11.0.0",
-    "package.json": "^2.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.2"

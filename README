@@ -1,0 +1,63 @@
+# Budget Tracker Frontend
+
+A responsive React-based frontend for tracking income, expenses, and due dates. This app allows users to log financial transactions, categorize them, and view upcoming payments or income based on frequency and due dates.
+
+---
+
+## Features
+
+- Add, edit, and view income and expense transactions
+- Filter transactions by category and due date (This Week, This Month, Next Month)
+- Calculate total income, expenses, and net balance
+- Supports recurring transaction frequencies (once, weekly, biweekly, monthly, annually)
+- Dynamic UI with conditional rendering based on login state
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- npm (comes with Node.js)
+
+---
+
+### Installation
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/plager20/budget-tracker.git
+   cd budget-tracker
+
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running the App
+
+To start the development server:
+
+    ```bash
+    npm run dev
+    ```
+
+This will automatically open the app in your default browser using Vite
+
+### Technologies Used
+
+    React 19
+    React Router DOM
+    Vite
+    ESLint
+
+### License
+
+This project is licensed under the MIT License.
+See the LICENSE file for details.
