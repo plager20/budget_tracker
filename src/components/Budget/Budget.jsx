@@ -51,7 +51,7 @@ function Budget({
     const endLimit = new Date(today);
     endLimit.setMonth(endLimit.getMonth() + maxMonths);
 
-    // For "All", just show the base transaction once
+    // "All" filter only shows transactions once
     if (filter === 'All' || !freqDays) {
       results.push(transaction);
       return results;
@@ -181,7 +181,7 @@ function Budget({
       </div>
 
       <div className='budget__lists'>
-        {/* INCOME LIST */}
+        {/* Income */}
         <ul className='budget__list'>
           <span className='budget__list-title'>Income</span>
           <div className='budget__list-filter-options'>
@@ -227,7 +227,7 @@ function Budget({
           )}
         </ul>
 
-        {/* EXPENSE LIST */}
+        {/* Expenses */}
         <ul className='budget__list'>
           <span className='budget__list-title'>Expenses</span>
           <div className='budget__list-filter-options'>

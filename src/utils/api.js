@@ -45,6 +45,8 @@ async function patchItems(card, id, token) {
       type: card.type,
       amount: card.amount,
       category: card.category,
+      dueDate: card.dueDate,
+      dueDateFrequency: card.dueDateFrequency,
     }),
   });
 }

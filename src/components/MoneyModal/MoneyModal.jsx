@@ -166,11 +166,10 @@ function MoneyModal({ closeActiveModal, isOpen, onAddItem }) {
             </label>
           )}
 
-          {/* Transaction Due Date */}
-
+          {/* Transaction Due/Receive Date */}
           {type && (
             <label htmlFor='dueDate' className='moneyModal__label'>
-              Next Due Date
+              Next Due/Receive Date
               <input
                 type='date'
                 id='dueDate'
